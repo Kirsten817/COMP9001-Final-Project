@@ -36,17 +36,17 @@ class Pitcher:
         control = self.control
         confidence = self.confidence
         proficiency = self.proficiency[pitch_type]
-        best_bonus = 10 if location == self.best_position else 0
+        best_bonus = 0
+        if location == self.best_position:
+            best_bonus = 10
         return (0.4 * control + 0.4 * proficiency + 0.2 * confidence + best_bonus) * perf_mod
 
-    def display_attributes(self):
-        
+    def display_attributes(self):      
         print(f"🎖 {self.name} Attributes:")
         print(f"Control: {self.control}, Confidence: {self.confidence}, Best Position: {self.best_position}")
         print(f'Proficiency: Fastball: {self.proficiency["fastball"]}, Slider: {self.proficiency["slider"]}, Changeup: {self.proficiency["changeup"]}')
 
     def display_records(self):
-        
         print(f"Thrown Pitches: {self.pitches_thrown}, Count of Ball: {self.ball_count}, Count of Strikes: {self.strike_count}")
 
 def generate_pitcher(style="balanced"):
@@ -294,7 +294,7 @@ class GameEngine:
             print("Swing and miss!")
             batter.strikes += 1
             self.pitcher.strike_count += 1
-            print("Result: Miss")
+            print("Result: MISS")
             batter.memory.append((pitch_type, "miss"))
             return
 
@@ -303,30 +303,30 @@ class GameEngine:
             self.pitcher.runs_allowed += 1
             batter.on_base = True
             self.pitcher.decrease_confidence("home_run")
-            print("Home run!")
+            print("HOME RUN!")
             return "on_base"
         elif final_contact >= 85:
             hit_type = "line_drive"
             self.pitcher.hits_allowed += 1
             batter.on_base = True
             self.pitcher.decrease_confidence("hit")
-            print("Hit: Outfield Single!")
+            print("HIT: Outfield Single!")
             return "on_base"
         elif final_contact >= 75:
             hit_type = "ground_ball"
             batter.on_base = batter.speed >= 80
-            print("The ball is hit into the infield!")
+            print("The ball is HIT INTO THE INFIELD!")
             if batter.on_base:
                 self.pitcher.hits_allowed += 1
                 self.pitcher.decrease_confidence("hit")
-                print("Hit: Infield Single!")
+                print("HIT: Infield Single!")
                 return "on_base"
             else:
-                print("On base failed.")
+                print("On base FAILED.")
                 return "out"
         else:
             hit_type = "foul"
-            print("Foul ball!")
+            print("FOUL BALL!")
             if batter.strikes < 2:
                 batter.strikes += 1
             self.pitcher.strike_count += 1
@@ -343,19 +343,19 @@ class GameEngine:
         for i in [2, 1, 0]:
             runner = self.bases[i]
             if runner and runner.speed > 80 and i < 2 and self.bases[i + 1] is None:
-                next_base = ['second', 'third', 'home'][i]
-                print(f"{runner.name} attempts to steal {next_base} base!")
+                next_base = ['SECOND', 'THIRD', 'HOME'][i]
+                print(f"{runner.name} attempts to STEAL {next_base} base!")
                 input("⚠️ Catcher, press ENTER to prepare...")
                 start = time.time()
                 input("NOW! Press ENTER again quickly!")
                 end = time.time()
                 reaction = end - start
                 if reaction <= 0.5:
-                    print(f"Caught stealing! {runner.name} is out.")
+                    print(f"Caught stealing! {runner.name} is OUT.")
                     self.bases[i] = None
                     steal_failed = True
                 else:
-                    print(f"{runner.name} successfully steals {next_base} base!")
+                    print(f"{runner.name} SUCCESSFULLY STEALS {next_base} base!")
                     runner.speed = max(0, runner.speed - 10)
                     self.bases[i + 1] = runner
                     self.bases[i] = None
@@ -366,10 +366,10 @@ class GameEngine:
 
     def update_bases(self, batter):
         if self.bases[2]:
-            print(f"Run scores from third! ({self.bases[2].name})")
+            print(f"RUN SCORES from third! ({self.bases[2].name})")
             self.score += 1
             if self.score >= 3:
-                print("💥 3 runs allowed! You lose! The inning ends early.")
+                print("💥 3 RUNS ALLOWED! YOU LOSE! THE INNING ENDS EARLY.")
         self.bases[2] = self.bases[1]
         self.bases[1] = self.bases[0]
         self.bases[0] = batter
@@ -399,7 +399,7 @@ class GameEngine:
         batter_count = 0
         while outs < 3 and self.score < 3:
             batter = self.batters[self.current_batter_index % 9]
-            print(f"\n🧢 Now batting: {batter.name} (#{self.current_batter_index % 9 + 1})")
+            print(f"\n🧢 NOW BATTING: {batter.name} (#{self.current_batter_index % 9 + 1})")
             print(f"{batter_descriptions[batter.name]}")
             batter.display_attributes()
             while True:
@@ -473,7 +473,7 @@ class GameEngine:
                     break
 
             if batter.balls >= 4:
-                print("Walk! The batter takes first base.")
+                print("WALK! The batter takes first base.")
                 batter.on_base = True
                 on_base += 1
                 self.update_bases(batter)
@@ -484,7 +484,7 @@ class GameEngine:
                 if self.score >= 3:
                     break
             elif batter.strikes >= 3:
-                print("Strikeout!")
+                print("STRIKEOUT!")
                 outs += 1     
                 if outs >= 3:
                     break       
