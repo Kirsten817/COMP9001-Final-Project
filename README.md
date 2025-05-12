@@ -9,3 +9,5 @@ Ace of Catcher is a command-line baseball catcher simulation game. You play as a
 * Realistic Stat Tracking: Tracks strikes, balls, outs, base occupancy, and pitcher performance after every pitch to simulate an authentic game pace.
 * Base-Stealing Mechanism: Speedy runners may attempt to steal bases. As the catcher, your reaction time within a limited window determines whether the runner is caught or succeeds.
 * End-of-Inning Summary and Outcome Feedback: The inning automatically ends after three outs or three runs allowed, with varied performance-based commentary reflecting your success.
+
+💡 Hint: While fastballs are easy to control, they’re also easier for batters to hit. Try mixing in more sliders and changeups, especially to high inside or high outside zones. Batters can be surprisingly tricky. Keep them guessing!😊
